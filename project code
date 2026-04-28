@@ -1,0 +1,249 @@
+import json
+import datetime
+
+patients = []
+vitals_log = []
+symptoms_log = []
+prescriptions = []
+appointments = []
+
+
+# -----------------------------
+# Patient Profile
+# -----------------------------
+def add_patient():
+    name = input("Enter Name: ")
+    age = int(input("Enter Age: "))
+    gender = input("Enter Gender: ")
+    blood = input("Enter Blood Group: ")
+    height = float(input("Enter Height (cm): "))
+    weight = float(input("Enter Weight (kg): "))
+    phone = input("Enter Phone Number: ")
+
+    patient = {
+        "name": name,
+        "age": age,
+        "gender": gender,
+        "blood_group": blood,
+        "height": height,
+        "weight": weight,
+        "phone": phone
+    }
+
+    patients.append(patient)
+    print("Patient profile added successfully")
+
+
+def view_patients():
+    for p in patients:
+        print(p)
+
+
+# -----------------------------
+# Vital Signs
+# -----------------------------
+def add_vitals():
+    bp = input("Enter BP (120/80): ")
+    heart_rate = int(input("Enter Heart Rate: "))
+    sugar = int(input("Enter Blood Sugar: "))
+    temp = float(input("Enter Temperature: "))
+    spo2 = int(input("Enter SpO2: "))
+
+    status = "Normal"
+
+    if heart_rate > 100 or sugar > 180:
+        status = "Alert"
+
+    if sugar > 250:
+        status = "Critical"
+
+    record = {
+        "time": str(datetime.datetime.now()),
+        "bp": bp,
+        "heart_rate": heart_rate,
+        "sugar": sugar,
+        "temperature": temp,
+        "spo2": spo2,
+        "status": status
+    }
+
+    vitals_log.append(record)
+    print("Vitals recorded")
+
+
+def view_vitals():
+    for v in vitals_log:
+        print(v)
+
+
+# -----------------------------
+# Symptoms
+# -----------------------------
+def add_symptom():
+    symptom = input("Enter symptom: ")
+    severity = int(input("Severity (1-10): "))
+    desc = input("Description: ")
+
+    symptoms_log.append({
+        "symptom": symptom,
+        "severity": severity,
+        "description": desc
+    })
+
+    print("Symptom logged")
+
+
+def view_symptoms():
+    for s in symptoms_log:
+        print(s)
+
+
+# -----------------------------
+# Prescription
+# -----------------------------
+def add_prescription():
+    doctor = input("Doctor name: ")
+    hospital = input("Hospital name: ")
+    medicine = input("Medicine name: ")
+    dosage = input("Dosage: ")
+
+    prescriptions.append({
+        "doctor": doctor,
+        "hospital": hospital,
+        "medicine": medicine,
+        "dosage": dosage
+    })
+
+    print("Prescription added")
+
+
+def view_prescriptions():
+    for p in prescriptions:
+        print(p)
+
+
+# -----------------------------
+# Appointments
+# -----------------------------
+def add_appointment():
+    doctor = input("Doctor name: ")
+    reason = input("Reason for visit: ")
+    bill = float(input("Bill amount: "))
+
+    appointments.append({
+        "doctor": doctor,
+        "reason": reason,
+        "bill": bill
+    })
+
+    print("Appointment saved")
+
+
+def view_appointments():
+    for a in appointments:
+        print(a)
+
+
+# -----------------------------
+# Save Data
+# -----------------------------
+def save_data():
+    data = {
+        "patients": patients,
+        "vitals": vitals_log,
+        "symptoms": symptoms_log,
+        "prescriptions": prescriptions,
+        "appointments": appointments
+    }
+
+    with open("health_data.json", "w") as f:
+        json.dump(data, f, indent=4)
+
+    print("Data saved to file")
+
+
+# -----------------------------
+# Simple Analytics
+# -----------------------------
+def analytics():
+    total_spent = 0
+
+    for a in appointments:
+        total_spent += a["bill"]
+
+    print("Total hospital spending:", total_spent)
+
+    if len(vitals_log) > 0:
+        avg_hr = sum(v["heart_rate"] for v in vitals_log) / len(vitals_log)
+        print("Average Heart Rate:", avg_hr)
+
+
+# -----------------------------
+# Main Menu
+# -----------------------------
+def main():
+
+    while True:
+
+        print("\nSMART HEALTH TRACKER")
+        print("1 Add Patient")
+        print("2 View Patients")
+        print("3 Add Vitals")
+        print("4 View Vitals")
+        print("5 Add Symptom")
+        print("6 View Symptoms")
+        print("7 Add Prescription")
+        print("8 View Prescriptions")
+        print("9 Add Appointment")
+        print("10 View Appointments")
+        print("11 Analytics")
+        print("12 Save Data")
+        print("13 Exit")
+
+        choice = input("Enter choice: ")
+
+        if choice == "1":
+            add_patient()
+
+        elif choice == "2":
+            view_patients()
+
+        elif choice == "3":
+            add_vitals()
+
+        elif choice == "4":
+            view_vitals()
+
+        elif choice == "5":
+            add_symptom()
+
+        elif choice == "6":
+            view_symptoms()
+
+        elif choice == "7":
+            add_prescription()
+
+        elif choice == "8":
+            view_prescriptions()
+
+        elif choice == "9":
+            add_appointment()
+
+        elif choice == "10":
+            view_appointments()
+
+        elif choice == "11":
+            analytics()
+
+        elif choice == "12":
+            save_data()
+
+        elif choice == "13":
+            print("Exiting system")
+            break
+
+        else:
+            print("Invalid option")
+
+
+main()
